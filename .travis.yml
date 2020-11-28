@@ -7,3 +7,18 @@ before_install:
   - docker build -t vadimyershov/docker-react -f Dockerfile.dev .
 script:
   - docker run -e CI=true vadimyershov/docker-react npm run test
+deploy:
+  provider: elasticbeanstalk
+  region: "us-east-1"
+  name: "docker-react"
+  env: "DockerReact-env"
+  bucket_name: "elasticbeanstalk-us-east-1-283415605965"
+  # most likely the bucket path will be the same as the app name
+  bucket_path: "docker-react"
+  # only deploy the application when the master (or whatever is selected) branch gets some new code
+  on:
+    branch: master
+    access_key_id: $AWS_ACCESS_KEY
+    secret_access_key: $AWS_SECRET_KEY
+
+    

@@ -18,7 +18,8 @@ deploy:
   # only deploy the application when the master (or whatever is selected) branch gets some new code
   on:
     branch: master
-    access_key_id: $AWS_ACCESS_KEY
-    secret_access_key: $AWS_SECRET_KEY
+    # these keys are generated through amazon IAM for use with the project
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: $AWS_SECRET_KEY
 
     

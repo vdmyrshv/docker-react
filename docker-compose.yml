@@ -1,0 +1,46 @@
+# specifies the version number of docker-compose that we're using
+version: '3'
+# telling docker what we want it to do
+# services is essentially saying "a type of container"
+# this command is very common in the Docker world
+services:
+    # it's important to note that by default, the services created in this
+    # file will be created on the same 'network', and free to communicate with each other
+    # unlike individual Docker containers, which by default do not communicate with other
+    # We can specify the image name as anything we want when building the container from this project
+    web:
+        # FOR CREATE REACT APP: added to fix a bug in create react app not allowing sequence entries
+        stdin_open: true
+        # FOR WINDOWS: this is so changes can be watched and updated automatically
+        environment:
+            - CHOKIDAR_USEPOLLING=true
+        build:
+            # context specifies where we want all the files and folders for the img to be pulled from
+            # because we are using a Dockerfile.dev file, not a Dockerfile
+            context: .
+            # specifying name of build file because we're not using a Dockerfile in dev
+            dockerfile: Dockerfile.dev
+        # port mapping - it's in quotes in docker volumes, not in quotes when doing docker build
+        ports:
+            - '3000:3000'
+        #specify volumes
+        volumes:
+            - /app/node_modules
+            # specify current working directory mapped to /app in container
+            - .:/app
+    #creating second service just for the sole purpose of testing (not required)
+    tests:
+        # FOR CREATE REACT APP: added to fix a bug in create react app not allowing sequence entries
+        stdin_open: true
+        # FOR WINDOWS: this is so changes can be watched and updated automatically
+        environment:
+            - CHOKIDAR_USEPOLLING=true
+        build:
+            context: .
+            dockerfile: Dockerfile.dev
+        # we do not need to specify ports here because tests are not running on a dev server
+        volumes:
+            - /app/node_modules
+            - .:/app
+        # override starting command to make sure it starts with "npm run test" as opposed to "npm run start"
+        command: ['npm', 'run', 'test']

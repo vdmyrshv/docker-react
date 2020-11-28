@@ -1,0 +1,19 @@
+# specify a base image
+FROM node:alpine
+
+# The working directory inside of the container that dependencies will be installed to
+WORKDIR '/app'
+
+# copy only the package.json file first, so that we will force a cache overwrite
+# ONLY if the package.json file is modified
+COPY package.json .
+
+# run the command to install dependencies in the intermediate container that will be in the final image
+RUN npm install
+
+# Copy command - copy everything from current working directory of local machine to current working directory of container
+COPY . . 
+
+# default command when final docker container is run
+CMD [ "npm", "run", "start" ]
+

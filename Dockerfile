@@ -24,6 +24,9 @@ RUN npm run build
 # to specify the start of a second phase, all you have to do is write FROM again
 # simply by putting a second FROM statement, docker knows that the previous block is complete
 FROM nginx
+# exposes the port that nginx will be running on
+# this is specifically for AWS Elastic Beanstalk, as it specifically searches for the port
+EXPOSE 80
 # now we copy over files from the previous phase
 # using the --from flag to specify which phase
 # we can use the alias as mentioned in the copy from the first FROM statement, 
